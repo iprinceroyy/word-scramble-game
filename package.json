@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.11.0",
     "parcel": "^2.11.0"
   },
   "name": "word-scramble",
@@ -86,6 +87,7 @@
     "regenerator-runtime": "^0.13.11",
     "resolve-from": "^4.0.0",
     "safe-buffer": "^5.2.1",
+    "sass": "^1.71.0",
     "semver": "^7.6.0",
     "source-map": "^0.6.1",
     "source-map-js": "^1.0.2",
