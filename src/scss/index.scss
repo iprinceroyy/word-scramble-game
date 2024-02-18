@@ -99,15 +99,19 @@ article {
 .letter__container {
   width: 3.8rem;
   height: 3.2rem;
-  // width: 100%;
-  // height: 100%;
   font-size: v.$medium-text;
   color: v.$catskill-white;
   text-align: center;
-  border: 2px solid v.$gull-gray;
+  border: 2px solid v.$grayish-purplish-blue;
   border-radius: 8px;
   background: transparent;
   padding-block: 0.7rem;
+  caret-color: transparent;
+
+  &:focus-within {
+    outline: 2px solid v.$vivid-violet;
+    border: none;
+  }
 }
 
 .buttons__container {

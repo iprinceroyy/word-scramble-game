@@ -13,15 +13,13 @@ class Game {
 
   constructor() {
     this._generateRandomWords();
+    this._focusNextElement();
     randomBtn.addEventListener('click', this._generateRandomWords.bind(this));
     resetBtn.addEventListener('click', this._clear);
-    matchedWordsContainer.addEventListener('input', this._checkWords.bind(this));
   }
 
-  _checkWords(e) {
-    if (e.target.value == '') return;
-    else this.matchedCharsArray.push(e.target.value);
-    console.log(this.matchedCharsArray);
+  _checkWords() {
+    console.log(this.matchedCharsArray.join('') === this.word);
   }
 
   _generateRandomWords() {
@@ -55,13 +53,40 @@ class Game {
     ${this.word
       .split('')
       .map(
-        (letter) =>
-          `<input type="text" class="letter__container" maxLength="1" aria-label=${letter} />`
+        (letter, i) =>
+          `<input type="text" class="letter__container" maxLength="1" aria-label=${letter} required />`
       )
       .join('')}
     `;
 
     matchedWordsContainer.style.gridTemplateColumns = `repeat(${this.word.length}, 1fr)`;
+  }
+
+  _focusNextElement() {
+    const inputs = Array.prototype.slice.call(document.querySelectorAll('input'));
+    inputs.forEach((input) => {
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Backspace') return;
+        if (input.value.length >= input.maxLength) {
+          event.preventDefault();
+          this._focusNext(inputs);
+        }
+      });
+    });
+  }
+
+  _focusNext(inputs) {
+    const currInput = document.activeElement;
+    const currInputIndex = inputs.indexOf(currInput);
+    const nextinputIndex = (currInputIndex + 1) % inputs.length;
+    const input = inputs[nextinputIndex];
+    if (nextinputIndex == 0) {
+      inputs.forEach((input) => this.matchedCharsArray.push(input.value));
+      this._checkWords();
+      return;
+    }
+    input.focus();
+    input.placeholder = '_';
   }
 
   _clear() {
