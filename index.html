@@ -15,6 +15,8 @@
     <!-- Top Level CSS File -->
     <link rel="stylesheet" href="./src/scss/index.scss" />
 
+    <script defer type="module" src="./src/js/index.js"></script>
+
     <title>Document</title>
   </head>
   <body>
@@ -22,7 +24,7 @@
       <article class="game__container">
         <h1 class="game__container--heading">Word Scramblle</h1>
 
-        <p class="random__words__container">relowf</p>
+        <p class="random__words__container"></p>
 
         <div class="game__status__container">
           <div class="game__status--tries">
@@ -35,23 +37,20 @@
               <div class="dot"></div>
             </div>
           </div>
-          <p class="game__status--mistakes">
-            Mistakes: <span>a, e, w, t</span>
-          </p>
+          <p class="game__status--mistakes">Mistakes: <span>a, e, w, t</span></p>
         </div>
 
-        <div class="matched__words__container">
-          <div class="letter__container">f</div>
-          <div class="letter__container">l</div>
-          <div class="letter__container">o</div>
-          <div class="letter__container">w</div>
-          <div class="letter__container">_</div>
-          <div class="letter__container"></div>
-        </div>
+        <form class="matched__words__container">
+          <!-- <input type="text" class="letter__container" aria-label="f" />
+          <input type="text" class="letter__container" aria-label="f" />
+          <input type="text" class="letter__container" aria-label="f" />
+          <input type="text" class="letter__container" aria-label="f" />
+          <input type="text" class="letter__container" aria-label="f" /> -->
+        </form>
 
         <div class="buttons__container">
-          <button type="button">Random</button>
-          <button type="reset">Reset</button>
+          <button class="btn--random" type="button">Random</button>
+          <button class="btn--reset" type="reset">Reset</button>
         </div>
       </article>
     </main>
