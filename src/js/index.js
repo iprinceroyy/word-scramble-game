@@ -10,23 +10,35 @@ const triesEle = document.querySelector('.tries');
 const dots = document.querySelectorAll('.dot');
 const wrongChars = document.querySelectorAll('.char--wrong');
 
-class Game {
+class GameStatus {
+  constructor() {
+    console.log('hey');
+  }
+}
+
+class App {
   word = '';
   totalTries = 0;
   matchedCharsArray = [];
 
   constructor() {
-    this._generateRandomWords();
-    this._focusNextElement();
-    randomBtn.addEventListener('click', this._generateRandomWords.bind(this));
-    resetBtn.addEventListener('click', this._clear);
+    this._renderInitial();
+    randomBtn.addEventListener('click', this._handleRandomBtnClick.bind(this));
+    resetBtn.addEventListener('click', this._handleReset.bind(this));
     matchedWordsContainer.addEventListener('input', this._validate);
   }
 
-  _validate(e) {
-    console.log(e.target.ariaLabel === e.target.value);
+  _handleReset() {
+    this._renderInitial();
+    this._clearDots();
+  }
 
-    return e.target.ariaLabel === e.target.value;
+  _renderInitial() {
+    this._generateRandomWords();
+    this._generateBlankBoxes();
+    this._updateTriesElement();
+    this._clearMistakesContainer();
+    this._focusNextElement();
   }
 
   _generateRandomWords() {
@@ -39,8 +51,6 @@ class Game {
     }
 
     randomWordsContainer.textContent = this._rearrangeLettersRandomly();
-
-    this._generateBlankBoxes();
   }
 
   _rearrangeLettersRandomly() {
@@ -52,6 +62,16 @@ class Game {
     randomStr = randomStr.split('').reverse().join('');
     console.log(randomStr);
     return randomStr;
+  }
+
+  _handleRandomBtnClick() {
+    this._generateRandomWords();
+    this._generateBlankBoxes();
+    this._focusNextElement();
+  }
+
+  _clearMistakesContainer() {
+    wrongChars.forEach((char) => (char.textContent = ''));
   }
 
   _generateBlankBoxes() {
@@ -88,31 +108,41 @@ class Game {
     const currInputIndex = inputs.indexOf(currInput);
     const nextinputIndex = (currInputIndex + 1) % inputs.length;
     const input = inputs[nextinputIndex];
-    if (nextinputIndex == 0) return;
+
     if (currInput.ariaLabel === currInput.value) {
+      if (nextinputIndex == 0) {
+        return;
+      }
       input.focus();
       input.placeholder = '_';
     } else {
       this._checkAnswers(currInput.value);
       this._showMistakes(currInput.value);
-      console.log(currInput.value);
     }
+  }
+
+  _clearDots() {
+    dots.forEach((dot) => dot.classList.remove('active'));
   }
 
   _checkAnswers() {
     this.totalTries += 1;
     if (this.totalTries > 5) {
       this.totalTries = 0;
-      this._generateBlankBoxes();
-      triesEle.innerHTML = `Tries(<span>${this.totalTries}</span>/5):`;
+      this._renderInitial();
       return;
     }
 
-    triesEle.innerHTML = `Tries(<span>${this.totalTries}</span>/5):`;
+    this._updateTriesElement();
     dots[this.totalTries - 1].classList.add('active');
   }
 
+  _updateTriesElement() {
+    triesEle.innerHTML = `Tries(<span>${this.totalTries}</span>/5):`;
+  }
+
   _showMistakes(userInput) {
+    if (this.totalTries - 1 == 5) return;
     wrongChars[this.totalTries - 1].textContent = `${userInput}, `;
   }
 
@@ -121,4 +151,4 @@ class Game {
   }
 }
 
-new Game();
+new App();
