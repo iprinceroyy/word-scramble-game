@@ -6,9 +6,13 @@ const randomWordsContainer = document.querySelector('.random__words__container')
 const randomBtn = document.querySelector('.btn--random');
 const resetBtn = document.querySelector('.btn--reset');
 const matchedWordsContainer = document.querySelector('.matched__words__container');
+const triesEle = document.querySelector('.tries');
+const dots = document.querySelectorAll('.dot');
+const wrongChars = document.querySelectorAll('.char--wrong');
 
 class Game {
   word = '';
+  totalTries = 0;
   matchedCharsArray = [];
 
   constructor() {
@@ -16,10 +20,13 @@ class Game {
     this._focusNextElement();
     randomBtn.addEventListener('click', this._generateRandomWords.bind(this));
     resetBtn.addEventListener('click', this._clear);
+    matchedWordsContainer.addEventListener('input', this._validate);
   }
 
-  _checkWords() {
-    console.log(this.matchedCharsArray.join('') === this.word);
+  _validate(e) {
+    console.log(e.target.ariaLabel === e.target.value);
+
+    return e.target.ariaLabel === e.target.value;
   }
 
   _generateRandomWords() {
@@ -77,16 +84,36 @@ class Game {
 
   _focusNext(inputs) {
     const currInput = document.activeElement;
+    console.log(currInput.ariaLabel);
     const currInputIndex = inputs.indexOf(currInput);
     const nextinputIndex = (currInputIndex + 1) % inputs.length;
     const input = inputs[nextinputIndex];
-    if (nextinputIndex == 0) {
-      inputs.forEach((input) => this.matchedCharsArray.push(input.value));
-      this._checkWords();
+    if (nextinputIndex == 0) return;
+    if (currInput.ariaLabel === currInput.value) {
+      input.focus();
+      input.placeholder = '_';
+    } else {
+      this._checkAnswers(currInput.value);
+      this._showMistakes(currInput.value);
+      console.log(currInput.value);
+    }
+  }
+
+  _checkAnswers() {
+    this.totalTries += 1;
+    if (this.totalTries > 5) {
+      this.totalTries = 0;
+      this._generateBlankBoxes();
+      triesEle.innerHTML = `Tries(<span>${this.totalTries}</span>/5):`;
       return;
     }
-    input.focus();
-    input.placeholder = '_';
+
+    triesEle.innerHTML = `Tries(<span>${this.totalTries}</span>/5):`;
+    dots[this.totalTries - 1].classList.add('active');
+  }
+
+  _showMistakes(userInput) {
+    wrongChars[this.totalTries - 1].textContent = `${userInput}, `;
   }
 
   _clear() {

@@ -66,6 +66,13 @@ article {
   gap: 0.5rem;
 }
 
+.tries {
+  span {
+    font-size: v.$small-text;
+    color: currentColor;
+  }
+}
+
 .dots__container {
   display: flex;
   align-items: center;
