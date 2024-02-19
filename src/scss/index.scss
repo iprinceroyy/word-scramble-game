@@ -23,8 +23,14 @@ main {
 article {
   background-color: v.$black-pearl;
   border-radius: 10px;
-  padding: 2rem;
+  padding-inline: 1.5rem;
+  padding-block: 1.8rem;
   color: white;
+
+  @media (min-width: 640px) {
+    padding-inline: 2rem;
+    padding-block: 2rem;
+  }
 }
 
 .game__container--heading {
@@ -46,10 +52,13 @@ article {
   margin-block: 1.5rem;
   border-radius: 5px;
   box-shadow: 0 1rem 1rem 1rem black;
+
+  @media (min-width: 640px) {
+  }
 }
 
 .game__status__container {
-  font-size: v.$small-text;
+  font-size: 0.7rem;
   display: flex;
   justify-content: space-around;
   color: v.$grayish-purplish-blue;
@@ -57,6 +66,10 @@ article {
   span {
     font-size: 1rem;
     color: v.$catskill-white;
+  }
+
+  @media (min-width: 640px) {
+    font-size: v.$small-text;
   }
 }
 
@@ -76,14 +89,23 @@ article {
 .dots__container {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  column-gap: 0.2rem;
+
+  @media (min-width: 640px) {
+    column-gap: 0.5rem;
+  }
 }
 
 .dot {
-  width: 0.4rem;
-  height: 0.4rem;
+  width: 0.3rem;
+  height: 0.3rem;
   border-radius: 50%;
   background-color: v.$grayish-purplish-blue;
+
+  @media (min-width: 640px) {
+    width: 0.4rem;
+    height: 0.4rem;
+  }
 }
 
 .active {
@@ -92,9 +114,8 @@ article {
 
 .matched__words__container {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  column-gap: 0.5rem;
-  justify-content: space-around;
+  column-gap: 0rem;
+  justify-items: center;
   margin-block: 3rem;
 
   @media (min-width: 640px) {
@@ -104,20 +125,25 @@ article {
 }
 
 .letter__container {
-  width: 3.8rem;
-  height: 3.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
   font-size: v.$medium-text;
   color: v.$catskill-white;
   text-align: center;
   border: 2px solid v.$grayish-purplish-blue;
   border-radius: 8px;
   background: transparent;
-  padding-block: 0.7rem;
+  padding-block: 0.2rem;
   caret-color: transparent;
 
   &:focus-within {
     outline: 2px solid v.$vivid-violet;
     border: none;
+  }
+
+  @media (min-width: 640px) {
+    width: 3.8rem;
+    height: 3.2rem;
   }
 }
 
@@ -138,7 +164,11 @@ article {
     font-size: v.$button-text;
     color: v.$catskill-white;
     background-color: v.$vivid-violet;
-    padding-block: 1rem;
+    padding-block: 0.75rem;
     box-shadow: 0 4.4px 1px 0 v.$deep-purple;
+
+    @media (min-width: 640px) {
+      padding-block: 1rem;
+    }
   }
 }

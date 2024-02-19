@@ -10,12 +10,6 @@ const triesEle = document.querySelector('.tries');
 const dots = document.querySelectorAll('.dot');
 const wrongChars = document.querySelectorAll('.char--wrong');
 
-class GameStatus {
-  constructor() {
-    console.log('hey');
-  }
-}
-
 class App {
   word = '';
   totalTries = 0;
@@ -25,20 +19,23 @@ class App {
     this._renderInitial();
     randomBtn.addEventListener('click', this._handleRandomBtnClick.bind(this));
     resetBtn.addEventListener('click', this._handleReset.bind(this));
-    matchedWordsContainer.addEventListener('input', this._validate);
-  }
-
-  _handleReset() {
-    this._renderInitial();
-    this._clearDots();
   }
 
   _renderInitial() {
     this._generateRandomWords();
     this._generateBlankBoxes();
-    this._updateTriesElement();
-    this._clearMistakesContainer();
     this._focusNextElement();
+  }
+
+  _handleRandomBtnClick() {
+    this._generateRandomWords();
+    this._generateBlankBoxes();
+    this._focusNextElement();
+  }
+
+  _handleReset() {
+    this._renderInitial();
+    this._clearDots();
   }
 
   _generateRandomWords() {
@@ -60,18 +57,7 @@ class App {
     randomStr += this.word.substring(len / 2);
     randomStr += this.word.substring(0, len / 2);
     randomStr = randomStr.split('').reverse().join('');
-    console.log(randomStr);
     return randomStr;
-  }
-
-  _handleRandomBtnClick() {
-    this._generateRandomWords();
-    this._generateBlankBoxes();
-    this._focusNextElement();
-  }
-
-  _clearMistakesContainer() {
-    wrongChars.forEach((char) => (char.textContent = ''));
   }
 
   _generateBlankBoxes() {
@@ -110,19 +96,17 @@ class App {
     const input = inputs[nextinputIndex];
 
     if (currInput.ariaLabel === currInput.value) {
-      if (nextinputIndex == 0) {
+      if (nextinputIndex == 0 && this.totalTries <= 5) {
+        alert('🎉 Success');
         return;
       }
+
       input.focus();
       input.placeholder = '_';
     } else {
       this._checkAnswers(currInput.value);
       this._showMistakes(currInput.value);
     }
-  }
-
-  _clearDots() {
-    dots.forEach((dot) => dot.classList.remove('active'));
   }
 
   _checkAnswers() {
@@ -146,8 +130,12 @@ class App {
     wrongChars[this.totalTries - 1].textContent = `${userInput}, `;
   }
 
-  _clear() {
-    randomWordsContainer.textContent = '';
+  _clearDots() {
+    dots.forEach((dot) => dot.classList.remove('active'));
+  }
+
+  _clearMistakesContainer() {
+    wrongChars.forEach((char) => (char.textContent = ''));
   }
 }
 
