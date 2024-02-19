@@ -111,7 +111,7 @@
   "source": "index.html",
   "scripts": {
     "start": "rm -rf .parcel-cache && parcel",
-    "build": "rm -rf .parcel-cache && parcel build"
+    "build": "parcel build"
   },
   "author": "Prince Roy",
   "license": "ISC",
