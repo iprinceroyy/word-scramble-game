@@ -38,6 +38,16 @@ class App {
     this._clearDots();
   }
 
+  _rearrangeLettersRandomly() {
+    const len = this.word.length;
+
+    let randomStr = '';
+    randomStr += this.word.substring(len / 2);
+    randomStr += this.word.substring(0, len / 2);
+    randomStr = randomStr.split('').reverse().join('');
+    return randomStr;
+  }
+
   _generateRandomWords() {
     this.word = generate();
 
@@ -48,16 +58,6 @@ class App {
     }
 
     randomWordsContainer.textContent = this._rearrangeLettersRandomly();
-  }
-
-  _rearrangeLettersRandomly() {
-    const len = this.word.length;
-
-    let randomStr = '';
-    randomStr += this.word.substring(len / 2);
-    randomStr += this.word.substring(0, len / 2);
-    randomStr = randomStr.split('').reverse().join('');
-    return randomStr;
   }
 
   _generateBlankBoxes() {
@@ -113,7 +113,11 @@ class App {
     this.totalTries += 1;
     if (this.totalTries > 5) {
       this.totalTries = 0;
-      this._renderInitial();
+      this._generateRandomWords();
+      this._generateBlankBoxes();
+      this._updateTriesElement();
+      this._clearMistakesContainer();
+      this._clearDots();
       return;
     }
 
