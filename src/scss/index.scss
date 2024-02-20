@@ -1,4 +1,5 @@
 @use 'variables' as v;
+@use 'animation';
 
 *,
 *::before,
@@ -51,10 +52,9 @@ article {
   padding-block: 1rem;
   margin-block: 1.5rem;
   border-radius: 5px;
-  box-shadow: 0 1rem 1rem 1rem black;
-
-  @media (min-width: 640px) {
-  }
+  box-shadow: 0 1rem 1rem -1rem black;
+  animation-name: puffIn;
+  animation-duration: 1s;
 }
 
 .game__status__container {
@@ -117,10 +117,12 @@ article {
   column-gap: 0rem;
   justify-items: center;
   margin-block: 3rem;
+  animation-name: zoomIn;
+  animation-duration: 1s;
 
   @media (min-width: 640px) {
-    column-gap: 1rem;
-    padding-inline: 3rem;
+    column-gap: 0.5rem;
+    padding-inline: 1rem;
   }
 }
 
@@ -166,9 +168,15 @@ article {
     background-color: v.$vivid-violet;
     padding-block: 0.75rem;
     box-shadow: 0 4.4px 1px 0 v.$deep-purple;
+    transition: all 1ms ease-in-out;
 
     @media (min-width: 640px) {
       padding-block: 1rem;
+    }
+
+    &:active {
+      transform: translateY(4.4px);
+      box-shadow: none;
     }
   }
 }

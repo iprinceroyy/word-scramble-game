@@ -57,7 +57,7 @@ class App {
       }
     }
 
-    randomWordsContainer.textContent = this._rearrangeLettersRandomly();
+    randomWordsContainer.innerHTML = `<span>${this._rearrangeLettersRandomly()}</span>`;
   }
 
   _generateBlankBoxes() {
@@ -104,8 +104,14 @@ class App {
       input.focus();
       input.placeholder = '_';
     } else {
-      this._checkAnswers(currInput.value);
+      currInput.classList.add('flipInY');
+      setTimeout(() => {
+        currInput.classList.remove('flipInY');
+      }, 500);
+      currInput.placeholder = '_';
+      this._checkAnswers();
       this._showMistakes(currInput.value);
+      currInput.value = '';
     }
   }
 
