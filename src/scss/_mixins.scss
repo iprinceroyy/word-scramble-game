@@ -1,0 +1,42 @@
+@mixin flex-container($gap, $justify, $align) {
+  display: flex;
+  @if $gap !=0 {
+    gap: $gap;
+  }
+  @if $align != '' {
+    align-items: $align;
+  }
+  @if $justify != '' {
+    justify-content: $justify;
+  }
+}
+
+@mixin grid-container($columns: 0, $row-gap: 0, $column-gap: 0, $align: normal, $justify: normal) {
+  display: grid;
+  @if $columns != 0 {
+    grid-template-columns: repeat($columns, 1fr);
+  }
+
+  @if $row-gap != 0 {
+    row-gap: $row-gap;
+  }
+
+  @if $column-gap !=0 {
+    column-gap: $column-gap;
+  }
+
+  @if $align != normal and $justify!=normal {
+    place-items: $align $justify;
+  } @else if $align !=normal {
+    align-items: $align;
+  } @else if $justify != normal {
+    justify-items: $justify;
+  }
+}
+
+@mixin padding-setting($top: 0, $right: 0, $bottom: 0, $left: 0) {
+  padding-block-start: $top;
+  padding-block-end: $bottom;
+  padding-inline-start: $left;
+  padding-inline-end: $right;
+}

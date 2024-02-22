@@ -1,152 +1,141 @@
-'use strict';
-
-import { generate } from 'random-words';
-
-const randomWordsContainer = document.querySelector('.random__words__container');
-const randomBtn = document.querySelector('.btn--random');
-const resetBtn = document.querySelector('.btn--reset');
-const matchedWordsContainer = document.querySelector('.matched__words__container');
-const triesEle = document.querySelector('.tries');
-const dots = document.querySelectorAll('.dot');
-const wrongChars = document.querySelectorAll('.char--wrong');
-
-class App {
-  word = '';
-  totalTries = 0;
-  matchedCharsArray = [];
-
-  constructor() {
-    this._renderInitial();
-    randomBtn.addEventListener('click', this._handleRandomBtnClick.bind(this));
-    resetBtn.addEventListener('click', this._handleReset.bind(this));
-  }
-
-  _renderInitial() {
-    this._generateRandomWords();
-    this._generateBlankBoxes();
-    this._focusNextElement();
-  }
-
-  _handleRandomBtnClick() {
-    this._generateRandomWords();
-    this._generateBlankBoxes();
-    this._focusNextElement();
-  }
-
-  _handleReset() {
-    this._renderInitial();
-    this._clearDots();
-  }
-
-  _rearrangeLettersRandomly() {
-    const len = this.word.length;
-
-    let randomStr = '';
-    randomStr += this.word.substring(len / 2);
-    randomStr += this.word.substring(0, len / 2);
-    randomStr = randomStr.split('').reverse().join('');
-    return randomStr;
-  }
-
-  _generateRandomWords() {
-    this.word = generate();
-
-    if (this.word.length < 3 || this.word.length > 6) {
-      while (this.word.length < 3 || this.word.length > 6) {
-        this.word = generate();
-      }
-    }
-
-    randomWordsContainer.innerHTML = `<span>${this._rearrangeLettersRandomly()}</span>`;
-  }
-
-  _generateBlankBoxes() {
-    matchedWordsContainer.innerHTML = '';
-    matchedWordsContainer.innerHTML = `
-    ${this.word
-      .split('')
-      .map(
-        (letter, i) =>
-          `<input type="text" class="letter__container" maxLength="1" aria-label=${letter} required />`
-      )
-      .join('')}
-    `;
-
-    matchedWordsContainer.style.gridTemplateColumns = `repeat(${this.word.length}, 1fr)`;
-  }
-
-  _focusNextElement() {
-    const inputs = Array.prototype.slice.call(document.querySelectorAll('input'));
-    inputs.forEach((input) => {
-      input.addEventListener('keydown', (event) => {
-        if (event.key === 'Backspace') return;
-        if (input.value.length >= input.maxLength) {
-          event.preventDefault();
-          this._focusNext(inputs);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var random_words_1 = require("random-words");
+var randomWordsContainer = document.querySelector('.random__words__container');
+var randomBtn = document.querySelector('.btn--random');
+var resetBtn = document.querySelector('.btn--reset');
+var matchedWordsContainer = document.querySelector('.matched__words__container');
+var triesEle = document.querySelector('.tries');
+var dots = document.querySelectorAll('.dot');
+var wrongChars = document.querySelectorAll('.char--wrong');
+var App = (function () {
+    function App() {
+        this.word = '';
+        this.totalTries = 0;
+        this._renderInitial();
+        if (randomBtn instanceof HTMLButtonElement && resetBtn instanceof HTMLButtonElement) {
+            randomBtn.addEventListener('click', this._handleRandomBtnClick.bind(this));
+            resetBtn.addEventListener('click', this._handleReset.bind(this));
         }
-      });
-    });
-  }
-
-  _focusNext(inputs) {
-    const currInput = document.activeElement;
-    console.log(currInput.ariaLabel);
-    const currInputIndex = inputs.indexOf(currInput);
-    const nextinputIndex = (currInputIndex + 1) % inputs.length;
-    const input = inputs[nextinputIndex];
-
-    if (currInput.ariaLabel === currInput.value) {
-      if (nextinputIndex == 0 && this.totalTries <= 5) {
-        alert('🎉 Success');
-        return;
-      }
-
-      input.focus();
-      input.placeholder = '_';
-    } else {
-      currInput.classList.add('flipInY');
-      setTimeout(() => {
-        currInput.classList.remove('flipInY');
-      }, 500);
-      currInput.placeholder = '_';
-      this._checkAnswers();
-      this._showMistakes(currInput.value);
-      currInput.value = '';
     }
-  }
-
-  _checkAnswers() {
-    this.totalTries += 1;
-    if (this.totalTries > 5) {
-      this.totalTries = 0;
-      this._generateRandomWords();
-      this._generateBlankBoxes();
-      this._updateTriesElement();
-      this._clearMistakesContainer();
-      this._clearDots();
-      return;
-    }
-
-    this._updateTriesElement();
-    dots[this.totalTries - 1].classList.add('active');
-  }
-
-  _updateTriesElement() {
-    triesEle.innerHTML = `Tries(<span>${this.totalTries}</span>/5):`;
-  }
-
-  _showMistakes(userInput) {
-    if (this.totalTries - 1 == 5) return;
-    wrongChars[this.totalTries - 1].textContent = `${userInput}, `;
-  }
-
-  _clearDots() {
-    dots.forEach((dot) => dot.classList.remove('active'));
-  }
-
-  _clearMistakesContainer() {
-    wrongChars.forEach((char) => (char.textContent = ''));
-  }
-}
-
+    App.prototype._renderInitial = function () {
+        this._generateRandomWords();
+        this._generateBlankBoxes();
+        this._focusNextElement();
+    };
+    App.prototype._handleRandomBtnClick = function () {
+        this._generateRandomWords();
+        this._generateBlankBoxes();
+        this._focusNextElement();
+    };
+    App.prototype._handleReset = function () {
+        this._renderInitial();
+        this._clearDots();
+    };
+    App.prototype._rearrangeLettersRandomly = function () {
+        var len = this.word.length;
+        var randomStr = '';
+        if (typeof this.word === 'string') {
+            randomStr += this.word.substring(len / 2);
+            randomStr += this.word.substring(0, len / 2);
+            randomStr = randomStr.split('').reverse().join('');
+        }
+        return randomStr;
+    };
+    App.prototype._generateRandomWords = function () {
+        if (typeof this.word === 'string')
+            this.word = (0, random_words_1.generate)();
+        if (this.word.length < 3 || this.word.length > 6) {
+            while (this.word.length < 3 || this.word.length > 6) {
+                this.word = (0, random_words_1.generate)();
+            }
+        }
+        if (randomWordsContainer instanceof HTMLParagraphElement)
+            randomWordsContainer.innerHTML = "<span>".concat(this._rearrangeLettersRandomly(), "</span>");
+    };
+    App.prototype._generateBlankBoxes = function () {
+        if (typeof this.word === 'string' && matchedWordsContainer instanceof HTMLFormElement) {
+            matchedWordsContainer.innerHTML = '';
+            matchedWordsContainer.innerHTML = "\n  \n    ".concat(this.word
+                .split('')
+                .map(function (letter, i) {
+                return "<input type=\"text\" class=\"letter__container\" maxLength=\"1\" aria-label=".concat(letter, " required />");
+            })
+                .join(''), "\n    ");
+        }
+        if (matchedWordsContainer instanceof HTMLFormElement)
+            matchedWordsContainer.style.gridTemplateColumns = "repeat(".concat(this.word.length, ", 1fr)");
+    };
+    App.prototype._focusNextElement = function () {
+        var _this = this;
+        var inputs = Array.prototype.slice.call(document.querySelectorAll('input'));
+        inputs.forEach(function (input) {
+            input.addEventListener('keydown', function (event) {
+                if (event.key === 'Backspace')
+                    return;
+                if (input.value.length >= input.maxLength) {
+                    event.preventDefault();
+                    _this._focusNext(inputs);
+                }
+            });
+        });
+    };
+    App.prototype._focusNext = function (inputs) {
+        var currInput = document.activeElement;
+        if (currInput instanceof HTMLInputElement) {
+            var currInputIndex = inputs.indexOf(currInput);
+            var nextinputIndex = (currInputIndex + 1) % inputs.length;
+            var input = inputs[nextinputIndex];
+            if (currInput.ariaLabel === currInput.value) {
+                if (nextinputIndex == 0 && this.totalTries <= 5) {
+                    alert('🎉 Success');
+                    return;
+                }
+                input.focus();
+                input.placeholder = '_';
+            }
+            else {
+                currInput.classList.add('flipInY');
+                setTimeout(function () {
+                    currInput.classList.remove('flipInY');
+                }, 500);
+                currInput.placeholder = '_';
+                this._checkAnswers();
+                this._showMistakes(currInput.value);
+                currInput.value = '';
+            }
+        }
+    };
+    App.prototype._checkAnswers = function () {
+        this.totalTries += 1;
+        if (this.totalTries > 5) {
+            this.totalTries = 0;
+            this._generateRandomWords();
+            this._generateBlankBoxes();
+            this._updateTriesElement();
+            this._clearMistakesContainer();
+            this._clearDots();
+            return;
+        }
+        this._updateTriesElement();
+        dots[this.totalTries - 1].classList.add('active');
+    };
+    App.prototype._updateTriesElement = function () {
+        if (triesEle instanceof HTMLParagraphElement)
+            triesEle.innerHTML = "Tries(<span>".concat(this.totalTries, "</span>/5):");
+    };
+    App.prototype._showMistakes = function (userInput) {
+        if (this.totalTries - 1 == 5)
+            return;
+        wrongChars[this.totalTries - 1].textContent = "".concat(userInput, ", ");
+    };
+    App.prototype._clearDots = function () {
+        dots.forEach(function (dot) { return dot.classList.remove('active'); });
+    };
+    App.prototype._clearMistakesContainer = function () {
+        wrongChars.forEach(function (char) { return (char.textContent = ''); });
+    };
+    return App;
+}());
 new App();
+//# sourceMappingURL=index.js.map

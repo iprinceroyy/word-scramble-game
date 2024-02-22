@@ -1,5 +1,6 @@
 @use 'variables' as v;
 @use 'animation';
+@use 'mixins' as m;
 
 *,
 *::before,
@@ -12,30 +13,28 @@
 
 body {
   min-height: 100vh;
-  display: grid;
-  place-items: center center;
+  @include m.grid-container($align: center, $justify: center);
   background-image: linear-gradient(to right, v.$purple-heart, v.$vivid-violet);
 }
 
 main {
-  width: min(80%, 520px);
+  width: min(90%, 520px);
 }
 
 article {
+  text-align: center;
   background-color: v.$black-pearl;
   border-radius: 10px;
-  padding-inline: 1.5rem;
-  padding-block: 1.8rem;
+  @include m.padding-setting(1rem, 1.5rem, 2.5rem, 1.5rem);
   color: white;
 
   @media (min-width: 640px) {
-    padding-inline: 2rem;
-    padding-block: 2rem;
+    @include m.padding-setting(2rem, 2rem, 2rem, 2rem);
   }
 }
 
 .game__container--heading {
-  text-align: center;
+  font-size: v.$large-text;
   margin-block: 1rem;
   background-image: linear-gradient(90deg, v.$purple-heart 25%, v.$vivid-violet);
   -webkit-background-clip: text;
@@ -45,7 +44,6 @@ article {
 
 .random__words__container {
   background-color: v.$grayish-purplish-blue;
-  text-align: center;
   font-size: v.$large-text;
   color: v.$gull-gray;
   letter-spacing: 15px;
@@ -54,18 +52,18 @@ article {
   border-radius: 5px;
   box-shadow: 0 1rem 1rem -1rem black;
   animation-name: puffIn;
-  animation-duration: 1s;
+  animation-duration: 1.5s;
 }
 
 .game__status__container {
-  font-size: 0.7rem;
-  display: flex;
-  justify-content: space-around;
+  font-size: 0.92rem;
+  @include m.flex-container(0, space-around, '');
   color: v.$grayish-purplish-blue;
 
-  span {
-    font-size: 1rem;
-    color: v.$catskill-white;
+  .game__status--mistakes {
+    span {
+      color: v.$catskill-white;
+    }
   }
 
   @media (min-width: 640px) {
@@ -74,22 +72,17 @@ article {
 }
 
 .game__status--tries {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  @include m.flex-container($gap: 0.5rem, $justify: '', $align: baseline);
 }
 
 .tries {
   span {
-    font-size: v.$small-text;
     color: currentColor;
   }
 }
 
 .dots__container {
-  display: flex;
-  align-items: center;
-  column-gap: 0.2rem;
+  @include m.flex-container(0.2rem, '', center);
 
   @media (min-width: 640px) {
     column-gap: 0.5rem;
@@ -97,8 +90,8 @@ article {
 }
 
 .dot {
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 0.4rem;
+  height: 0.415rem;
   border-radius: 50%;
   background-color: v.$grayish-purplish-blue;
 
@@ -113,12 +106,10 @@ article {
 }
 
 .matched__words__container {
-  display: grid;
-  column-gap: 0rem;
-  justify-items: center;
+  @include m.grid-container($justify: center);
   margin-block: 3rem;
   animation-name: zoomIn;
-  animation-duration: 1s;
+  animation-duration: 2s;
 
   @media (min-width: 640px) {
     column-gap: 0.5rem;
@@ -127,15 +118,14 @@ article {
 }
 
 .letter__container {
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 2.6rem;
+  height: 3rem;
   font-size: v.$medium-text;
   color: v.$catskill-white;
   text-align: center;
   border: 2px solid v.$grayish-purplish-blue;
   border-radius: 8px;
   background: transparent;
-  padding-block: 0.2rem;
   caret-color: transparent;
 
   &:focus-within {
@@ -150,9 +140,7 @@ article {
 }
 
 .buttons__container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  column-gap: 1rem;
+  @include m.grid-container($columns: 2, $column-gap: 1rem);
 
   @media (min-width: 640px) {
     column-gap: 2rem;

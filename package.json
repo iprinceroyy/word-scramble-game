@@ -4,14 +4,15 @@
   "description": "Word Scarnble Game using vanillaJS",
   "source": "index.html",
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build"
+    "start": "tsc && parcel index.html",
+    "build": "tsc && parcel build index.html"
   },
   "author": "Prince Roy",
   "license": "ISC",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.11.0",
-    "parcel": "^2.11.0"
+    "parcel": "^2.11.0",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "random-words": "^2.0.1",

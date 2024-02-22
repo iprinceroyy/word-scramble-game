@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "outDir": "./src/js",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+
+  "watch": true,
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
