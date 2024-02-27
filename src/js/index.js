@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var random_words_1 = require("random-words");
+var js_confetti_1 = __importDefault(require("js-confetti"));
 var randomWordsContainer = document.querySelector('.random__words__container');
 var randomBtn = document.querySelector('.btn--random');
 var resetBtn = document.querySelector('.btn--reset');
@@ -13,6 +17,7 @@ var App = (function () {
         this.word = '';
         this.totalTries = 0;
         this._renderInitial();
+        this._focusNextElement();
         if (randomBtn instanceof HTMLButtonElement && resetBtn instanceof HTMLButtonElement) {
             randomBtn.addEventListener('click', this._handleRandomBtnClick.bind(this));
             resetBtn.addEventListener('click', this._handleReset.bind(this));
@@ -20,24 +25,30 @@ var App = (function () {
     }
     App.prototype._renderInitial = function () {
         this._generateRandomWords();
-        this._generateBlankBoxes();
-        this._focusNextElement();
+        this._createBlankBoxes();
+        this._updateLeftTriesElement();
+        this._clearDots();
+        this._clearMistakesContainer();
+        randomWordsContainer === null || randomWordsContainer === void 0 ? void 0 : randomWordsContainer.classList.add('puffInAnimation');
+        matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.classList.add('zoomInAnimation');
+        setTimeout(function () {
+            var firstInputElement = matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.children[0];
+            if (firstInputElement instanceof HTMLInputElement)
+                firstInputElement.focus();
+        }, 1500);
     };
     App.prototype._handleRandomBtnClick = function () {
         this._generateRandomWords();
-        this._generateBlankBoxes();
-        this._focusNextElement();
+        this._createBlankBoxes();
     };
     App.prototype._handleReset = function () {
         this._renderInitial();
-        this._clearDots();
     };
     App.prototype._rearrangeLettersRandomly = function () {
         var len = this.word.length;
         var randomStr = '';
         if (typeof this.word === 'string') {
-            randomStr += this.word.substring(len / 2);
-            randomStr += this.word.substring(0, len / 2);
+            randomStr = this.word.substring(len / 2) + this.word.substring(0, len / 2);
             randomStr = randomStr.split('').reverse().join('');
         }
         return randomStr;
@@ -50,15 +61,18 @@ var App = (function () {
                 this.word = (0, random_words_1.generate)();
             }
         }
+        this._addMarkup();
+    };
+    App.prototype._addMarkup = function () {
         if (randomWordsContainer instanceof HTMLParagraphElement)
             randomWordsContainer.innerHTML = "<span>".concat(this._rearrangeLettersRandomly(), "</span>");
     };
-    App.prototype._generateBlankBoxes = function () {
+    App.prototype._createBlankBoxes = function () {
         if (typeof this.word === 'string' && matchedWordsContainer instanceof HTMLFormElement) {
             matchedWordsContainer.innerHTML = '';
             matchedWordsContainer.innerHTML = "\n  \n    ".concat(this.word
                 .split('')
-                .map(function (letter, i) {
+                .map(function (letter) {
                 return "<input type=\"text\" class=\"letter__container\" maxLength=\"1\" aria-label=".concat(letter, " required />");
             })
                 .join(''), "\n    ");
@@ -68,72 +82,83 @@ var App = (function () {
     };
     App.prototype._focusNextElement = function () {
         var _this = this;
-        var inputs = Array.prototype.slice.call(document.querySelectorAll('input'));
-        inputs.forEach(function (input) {
-            input.addEventListener('keydown', function (event) {
-                if (event.key === 'Backspace')
-                    return;
-                if (input.value.length >= input.maxLength) {
-                    event.preventDefault();
-                    _this._focusNext(inputs);
+        if (matchedWordsContainer instanceof HTMLFormElement) {
+            matchedWordsContainer.addEventListener('input', function (event) {
+                if (event.target instanceof HTMLInputElement &&
+                    event.target.value.length === event.target.maxLength) {
+                    _this._focusNext();
                 }
             });
-        });
+        }
     };
-    App.prototype._focusNext = function (inputs) {
+    App.prototype._focusNext = function () {
+        var _this = this;
         var currInput = document.activeElement;
         if (currInput instanceof HTMLInputElement) {
-            var currInputIndex = inputs.indexOf(currInput);
-            var nextinputIndex = (currInputIndex + 1) % inputs.length;
-            var input = inputs[nextinputIndex];
+            var input = currInput.nextElementSibling;
             if (currInput.ariaLabel === currInput.value) {
-                if (nextinputIndex == 0 && this.totalTries <= 5) {
-                    alert('🎉 Success');
-                    return;
+                if (input === null && this.totalTries <= 5) {
+                    this._confetti();
+                    setTimeout(function () {
+                        _this.totalTries = 0;
+                        randomWordsContainer === null || randomWordsContainer === void 0 ? void 0 : randomWordsContainer.classList.remove('puffInAnimation');
+                        matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.classList.remove('zoomInAnimation');
+                        _this._renderInitial();
+                    }, 3000);
                 }
-                input.focus();
-                input.placeholder = '_';
+                else {
+                    if (input instanceof HTMLInputElement) {
+                        input.focus();
+                        input.placeholder = '_';
+                    }
+                }
             }
-            else {
+            else if (currInput.ariaLabel !== currInput.value) {
                 currInput.classList.add('flipInY');
+                this._increamentLeftTries();
+                this._updateLeftTriesElement();
+                this._updateDot();
+                this._showMistakes(currInput.value);
                 setTimeout(function () {
                     currInput.classList.remove('flipInY');
+                    currInput.value = '';
+                    currInput.placeholder = '_';
                 }, 500);
-                currInput.placeholder = '_';
-                this._checkAnswers();
-                this._showMistakes(currInput.value);
-                currInput.value = '';
             }
         }
     };
-    App.prototype._checkAnswers = function () {
-        this.totalTries += 1;
-        if (this.totalTries > 5) {
-            this.totalTries = 0;
-            this._generateRandomWords();
-            this._generateBlankBoxes();
-            this._updateTriesElement();
-            this._clearMistakesContainer();
-            this._clearDots();
+    App.prototype._updateDot = function () {
+        if (this.totalTries <= 0 || this.totalTries >= 6)
             return;
-        }
-        this._updateTriesElement();
         dots[this.totalTries - 1].classList.add('active');
     };
-    App.prototype._updateTriesElement = function () {
+    App.prototype._updateLeftTriesElement = function () {
         if (triesEle instanceof HTMLParagraphElement)
             triesEle.innerHTML = "Tries(<span>".concat(this.totalTries, "</span>/5):");
     };
-    App.prototype._showMistakes = function (userInput) {
-        if (this.totalTries - 1 == 5)
+    App.prototype._increamentLeftTries = function () {
+        this.totalTries += 1;
+        if (this.totalTries > 5) {
+            this.totalTries = 0;
+            this._renderInitial();
             return;
-        wrongChars[this.totalTries - 1].textContent = "".concat(userInput, ", ");
+        }
+    };
+    App.prototype._showMistakes = function (userInput) {
+        if (this.totalTries <= 0 || this.totalTries >= 6)
+            return;
+        wrongChars[this.totalTries - 1].textContent =
+            this.totalTries - 1 == 4 ? "".concat(userInput) : "".concat(userInput, ", ");
     };
     App.prototype._clearDots = function () {
         dots.forEach(function (dot) { return dot.classList.remove('active'); });
     };
     App.prototype._clearMistakesContainer = function () {
         wrongChars.forEach(function (char) { return (char.textContent = ''); });
+    };
+    App.prototype._confetti = function () {
+        var jsConfetti = new js_confetti_1.default();
+        jsConfetti.addConfetti();
     };
     return App;
 }());

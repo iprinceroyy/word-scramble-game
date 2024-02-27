@@ -51,8 +51,12 @@ article {
   margin-block: 1.5rem;
   border-radius: 5px;
   box-shadow: 0 1rem 1rem -1rem black;
-  animation-name: puffIn;
   animation-duration: 1.5s;
+  animation-fill-mode: backwards;
+}
+
+.puffInAnimation {
+  animation-name: puffIn;
 }
 
 .game__status__container {
@@ -108,13 +112,16 @@ article {
 .matched__words__container {
   @include m.grid-container($justify: center);
   margin-block: 3rem;
-  animation-name: zoomIn;
-  animation-duration: 2s;
+  animation-duration: 1.5s;
 
   @media (min-width: 640px) {
     column-gap: 0.5rem;
     padding-inline: 1rem;
   }
+}
+
+.zoomInAnimation {
+  animation-name: zoomIn;
 }
 
 .letter__container {
