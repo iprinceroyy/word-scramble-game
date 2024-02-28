@@ -29,21 +29,33 @@ var App = (function () {
         this._updateLeftTriesElement();
         this._clearDots();
         this._clearMistakesContainer();
-        randomWordsContainer === null || randomWordsContainer === void 0 ? void 0 : randomWordsContainer.classList.add('puffInAnimation');
-        matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.classList.add('zoomInAnimation');
-        setTimeout(function () {
-            var firstInputElement = matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.children[0];
-            if (firstInputElement instanceof HTMLInputElement)
-                firstInputElement.focus();
-        }, 1500);
+        this._toggleAnimation();
+        this._focusFirstElement();
     };
     App.prototype._handleRandomBtnClick = function () {
         this._generateRandomWords();
         this._createBlankBoxes();
+        this._focusFirstElement();
+        this._toggleAnimation();
     };
     App.prototype._handleReset = function () {
         this.totalTries = 0;
         this._renderInitial();
+    };
+    App.prototype._focusFirstElement = function () {
+        setTimeout(function () {
+            var firstInputElement = matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.children[0];
+            if (firstInputElement instanceof HTMLInputElement)
+                firstInputElement.focus();
+        }, 1700);
+    };
+    App.prototype._toggleAnimation = function () {
+        randomWordsContainer === null || randomWordsContainer === void 0 ? void 0 : randomWordsContainer.classList.add('puffInAnimation');
+        matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.classList.add('zoomInAnimation');
+        setTimeout(function () {
+            randomWordsContainer === null || randomWordsContainer === void 0 ? void 0 : randomWordsContainer.classList.remove('puffInAnimation');
+            matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.classList.remove('zoomInAnimation');
+        }, 1800);
     };
     App.prototype._rearrangeLettersRandomly = function () {
         var len = this.word.length;
@@ -103,8 +115,6 @@ var App = (function () {
                     this._confetti();
                     setTimeout(function () {
                         _this.totalTries = 0;
-                        randomWordsContainer === null || randomWordsContainer === void 0 ? void 0 : randomWordsContainer.classList.remove('puffInAnimation');
-                        matchedWordsContainer === null || matchedWordsContainer === void 0 ? void 0 : matchedWordsContainer.classList.remove('zoomInAnimation');
                         _this._renderInitial();
                     }, 3000);
                 }

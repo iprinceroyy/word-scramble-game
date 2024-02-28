@@ -25,9 +25,8 @@ class App {
   /**
    * This method initially generates random word, creates blank boxes,
    * update left tries element value to 0, clears dot container,
-   * clears mistake container. Also, it adds animation class
-   * to randomWordsContainer and matchedWordsContainer elements.
-   * After, 1.5secs it focuses on the first input element.
+   * clears mistake container, toggle animations, and focuses first
+   * input element
    * @protected
    */
   _renderInitial(): void {
@@ -36,14 +35,8 @@ class App {
     this._updateLeftTriesElement();
     this._clearDots();
     this._clearMistakesContainer();
-
-    randomWordsContainer?.classList.add('puffInAnimation');
-    matchedWordsContainer?.classList.add('zoomInAnimation');
-
-    setTimeout(() => {
-      const firstInputElement = matchedWordsContainer?.children[0];
-      if (firstInputElement instanceof HTMLInputElement) firstInputElement.focus();
-    }, 1500);
+    this._toggleAnimation();
+    this._focusFirstElement();
   }
 
   /**
@@ -53,6 +46,8 @@ class App {
   _handleRandomBtnClick(): void {
     this._generateRandomWords();
     this._createBlankBoxes();
+    this._focusFirstElement();
+    this._toggleAnimation();
   }
 
   /**
@@ -63,6 +58,32 @@ class App {
   _handleReset(): void {
     this.totalTries = 0;
     this._renderInitial();
+  }
+
+  /**
+   * The method focus on the first input element after 1.7 secs.
+   * @protected
+   */
+  _focusFirstElement() {
+    setTimeout(() => {
+      const firstInputElement = matchedWordsContainer?.children[0];
+      if (firstInputElement instanceof HTMLInputElement) firstInputElement.focus();
+    }, 1700);
+  }
+
+  /**
+   * The method adds animation to the randomWordsContainer and matchedWordsContainer
+   * and removes after 1.8sec.
+   * @protected
+   */
+  _toggleAnimation() {
+    randomWordsContainer?.classList.add('puffInAnimation');
+    matchedWordsContainer?.classList.add('zoomInAnimation');
+
+    setTimeout(() => {
+      randomWordsContainer?.classList.remove('puffInAnimation');
+      matchedWordsContainer?.classList.remove('zoomInAnimation');
+    }, 1800);
   }
 
   /**
@@ -167,8 +188,6 @@ class App {
           this._confetti();
           setTimeout(() => {
             this.totalTries = 0;
-            randomWordsContainer?.classList.remove('puffInAnimation');
-            matchedWordsContainer?.classList.remove('zoomInAnimation');
             this._renderInitial();
           }, 3000);
         } else {
