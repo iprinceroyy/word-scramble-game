@@ -61,6 +61,7 @@ class App {
    * @protected
    */
   _handleReset(): void {
+    this.totalTries = 0;
     this._renderInitial();
   }
 

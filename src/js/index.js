@@ -42,6 +42,7 @@ var App = (function () {
         this._createBlankBoxes();
     };
     App.prototype._handleReset = function () {
+        this.totalTries = 0;
         this._renderInitial();
     };
     App.prototype._rearrangeLettersRandomly = function () {
