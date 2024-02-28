@@ -94,10 +94,11 @@ var App = (function () {
     };
     App.prototype._focusNext = function () {
         var _this = this;
+        var _a, _b;
         var currInput = document.activeElement;
         if (currInput instanceof HTMLInputElement) {
             var input = currInput.nextElementSibling;
-            if (currInput.ariaLabel === currInput.value) {
+            if (((_a = currInput.ariaLabel) === null || _a === void 0 ? void 0 : _a.toLocaleLowerCase()) === currInput.value.toLocaleLowerCase()) {
                 if (input === null && this.totalTries <= 5) {
                     this._confetti();
                     setTimeout(function () {
@@ -114,7 +115,7 @@ var App = (function () {
                     }
                 }
             }
-            else if (currInput.ariaLabel !== currInput.value) {
+            else if (((_b = currInput.ariaLabel) === null || _b === void 0 ? void 0 : _b.toLocaleLowerCase()) !== currInput.value.toLocaleUpperCase()) {
                 currInput.classList.add('flipInY');
                 this._increamentLeftTries();
                 this._updateLeftTriesElement();

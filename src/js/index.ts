@@ -162,7 +162,7 @@ class App {
     if (currInput instanceof HTMLInputElement) {
       const input = currInput.nextElementSibling;
 
-      if (currInput.ariaLabel === currInput.value) {
+      if (currInput.ariaLabel?.toLocaleLowerCase() === currInput.value.toLocaleLowerCase()) {
         if (input === null && this.totalTries <= 5) {
           this._confetti();
           setTimeout(() => {
@@ -177,7 +177,7 @@ class App {
             input.placeholder = '_';
           }
         }
-      } else if (currInput.ariaLabel !== currInput.value) {
+      } else if (currInput.ariaLabel?.toLocaleLowerCase() !== currInput.value.toLocaleUpperCase()) {
         currInput.classList.add('flipInY');
         this._increamentLeftTries();
         this._updateLeftTriesElement();
